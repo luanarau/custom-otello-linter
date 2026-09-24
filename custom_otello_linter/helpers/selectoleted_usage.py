@@ -15,7 +15,7 @@ def imports_selectoleted(import_from_nodes: list[ast.ImportFrom]) -> bool:
 
 def is_selectoleted_call(func: ast.AST, import_from_nodes: list[ast.ImportFrom]) -> bool:
     """
-    Вызов `selectoleted(...)` в RHS присваивания, если функция импортирована из модуля selectolet.
+    Вызов `selectoleted(...)` в правой части присваивания, если функция импортирована из модуля selectolet.
     """
     if isinstance(func, ast.Name) and func.id == 'selectoleted':
         return imports_selectoleted(import_from_nodes)
