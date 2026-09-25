@@ -77,17 +77,6 @@ def test_selectoleted_import_as_alias():
     assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
 
 
-def test_selectoleted_import_from_any_module_flagged():
-    code = """
-    from other_package.helpers import selectoleted
-
-    @selectoleted
-    class Scenario:
-        pass
-    """
-    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
-
-
 def test_selectoleted_import_path_does_not_matter():
     code = """
     from moved.pkg.selectoleted import selectoleted
@@ -97,6 +86,17 @@ def test_selectoleted_import_path_does_not_matter():
         pass
     """
     assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
+
+
+def test_selectoleted_decorator_commented():
+    code = """
+    from other_package.helpers import selectoleted
+
+    #@selectoleted
+    class Scenario:
+        pass
+    """
+    assert_not_error(SelectoletedVisitor, code)
 
 
 def test_selectoleted_decorator_on_method_in_class():
