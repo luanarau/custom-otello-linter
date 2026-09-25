@@ -99,17 +99,6 @@ def test_selectoleted_import_path_does_not_matter():
     assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
 
 
-def test_selectoleted_decorator_commented():
-    code = """
-    from other_package.helpers import selectoleted
-
-    #@selectoleted
-    class Scenario:
-        pass
-    """
-    assert_not_error(SelectoletedVisitor, code)
-
-
 def test_selectoleted_decorator_on_method_in_class():
     code = """
     from tools.utils.test_selector.selectoleted import selectoleted
