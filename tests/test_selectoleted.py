@@ -108,3 +108,36 @@ def test_selectoleted_decorator_commented():
         pass
     """
     assert_not_error(SelectoletedVisitor, code)
+
+
+def test_selectoleted_decorator_on_method_in_class():
+    code = """
+    from tools.utils.test_selector.selectoleted import selectoleted
+
+    class Scenario:
+        @selectoleted
+        async def when_open_page(self):
+            pass
+    """
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
+
+
+def test_selectoleted_assign_in_class_body():
+    code = """
+    from tools.utils.test_selector.selectoleted import selectoleted
+
+    class SomePage:
+        locator = selectoleted('[data-test="x"]')
+    """
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
+
+
+def test_selectoleted_decorator_before_import_at_bottom():
+    code = """
+    @selectoleted
+    class Scenario:
+        pass
+
+    from tools.utils.test_selector.selectoleted import selectoleted
+    """
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)

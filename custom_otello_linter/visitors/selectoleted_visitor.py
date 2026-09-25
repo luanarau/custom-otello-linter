@@ -16,8 +16,11 @@ class SelectoletedVisitor(VisitorWithFilename):
         super().__init__(*args, **kwargs)
         self.import_from_nodes = []
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
-        self.import_from_nodes.append(node)
+    def visit_Module(self, node: ast.Module) -> None:
+        self.import_from_nodes = [
+            item for item in ast.walk(node) if isinstance(item, ast.ImportFrom)
+        ]
+        self.generic_visit(node)
 
     def _report_decorators(self, decorator_list: list[ast.expr]) -> None:
         for decorator in decorator_list:
@@ -26,6 +29,7 @@ class SelectoletedVisitor(VisitorWithFilename):
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         self._report_decorators(node.decorator_list)
+        self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         self._report_decorators(node.decorator_list)
