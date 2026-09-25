@@ -66,7 +66,18 @@ def test_selectoleted_decorator_on_async_function():
     assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
 
 
-def test_selectoleted_import_from_wrong_module_not_flagged():
+def test_selectoleted_import_as_alias():
+    code = """
+    from tools.utils.test_selector.selectoleted import selectoleted as sl
+
+    @sl
+    class Scenario:
+        pass
+    """
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
+
+
+def test_selectoleted_import_from_any_module_flagged():
     code = """
     from other_package.helpers import selectoleted
 
@@ -74,7 +85,18 @@ def test_selectoleted_import_from_wrong_module_not_flagged():
     class Scenario:
         pass
     """
-    assert_not_error(SelectoletedVisitor, code)
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
+
+
+def test_selectoleted_import_path_does_not_matter():
+    code = """
+    from moved.pkg.selectoleted import selectoleted
+
+    @selectoleted
+    class Scenario:
+        pass
+    """
+    assert_error(SelectoletedVisitor, code, DecoratorSelectoleted)
 
 
 def test_selectoleted_decorator_commented():
